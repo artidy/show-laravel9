@@ -1,6 +1,7 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\ShowController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,6 +15,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/users', [\App\Http\Controllers\UserController::class, 'index']);
-Route::post('/shows', [\App\Http\Controllers\ShowController::class, 'request']);
-Route::get('/shows', [\App\Http\Controllers\ShowController::class, 'index']);
+Route::get('/shows', [ShowController::class, 'index'])->name('show.index');
+Route::post('/shows', [ShowController::class, 'request'])
+    ->middleware('auth:sanctum')->name('show.request');
+
+Route::prefix('users')->name('user.')->middleware('auth:sanctum')->group(function () {
+    Route::get('/', [UserController::class, 'index'])->name('user.index');
+});
