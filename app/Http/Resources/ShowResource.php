@@ -14,6 +14,19 @@ class ShowResource extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'id' => $this->id,
+            'title' => $this->title,
+            'title_original' => $this->title_original,
+            'status' => $this->status,
+            'year' => $this->year,
+            'rating' => 0,
+            'total_seasons' => $this->total_seasons,
+            'total_episodes' => $this->total_episodes,
+            'genres' => [],
+            'watch_status' => '',
+            'watched_episodes' => 0,
+            'user_vote' => 0,
+        ];
     }
 }
