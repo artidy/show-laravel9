@@ -16,3 +16,4 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/users', [\App\Http\Controllers\UserController::class, 'index']);
 Route::post('/shows', [\App\Http\Controllers\ShowController::class, 'request']);
+Route::get('/shows', [\App\Http\Controllers\ShowController::class, 'index']);
