@@ -23,7 +23,7 @@ class ShowResource extends JsonResource
             'rating' => 0,
             'total_seasons' => $this->total_seasons,
             'total_episodes' => $this->total_episodes,
-            'genres' => [],
+            'genres' => $this->genres,
             'watch_status' => '',
             'watched_episodes' => 0,
             'user_vote' => 0,

@@ -12,4 +12,9 @@ class Genre extends Model
     protected $fillable = [
         'title',
     ];
+
+    protected $visible = [
+        'id',
+        'title',
+    ];
 }
