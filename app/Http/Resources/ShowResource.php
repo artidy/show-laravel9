@@ -20,13 +20,13 @@ class ShowResource extends JsonResource
             'title_original' => $this->title_original,
             'status' => $this->status,
             'year' => $this->year,
-            'rating' => 0,
+            'rating' => $this->rating,
             'total_seasons' => $this->total_seasons,
             'total_episodes' => $this->total_episodes,
             'genres' => $this->genres,
-            'watch_status' => '',
-            'watched_episodes' => 0,
-            'user_vote' => 0,
+            'watch_status' => $this->watch_status,
+            'watched_episodes' => $this->watched_episodes,
+            'user_vote' => $this->user_vote,
         ];
     }
 }
