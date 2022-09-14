@@ -15,6 +15,11 @@ class ShowController extends Controller
         return new ShowCollection(Show::paginate(20));
     }
 
+    public function getShow(int $showId): ShowResource
+    {
+        return new ShowResource(Show::find($showId));
+    }
+
     public function request(AddShowRequest $request): ShowResource
     {
         AddShow::dispatch($request->imdbId);

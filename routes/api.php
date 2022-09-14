@@ -21,6 +21,7 @@ Route::post('/logout', [AuthController::class, 'logout'])
     ->middleware('auth:sanctum')->name('auth.logout');
 
 Route::get('/shows', [ShowController::class, 'index'])->name('show.index');
+Route::get('/shows/{showId}', [ShowController::class, 'getShow'])->name('show.single');
 Route::post('/shows', [ShowController::class, 'request'])
     ->middleware('auth:sanctum')->name('show.request');
 
