@@ -15,9 +15,9 @@ class ShowController extends Controller
         return new ShowCollection(Show::paginate(20));
     }
 
-    public function getShow(int $showId): ShowResource
+    public function show(Show $show): ShowResource
     {
-        return new ShowResource(Show::find($showId));
+        return new ShowResource($show);
     }
 
     public function request(AddShowRequest $request): ShowResource
