@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\GenreController;
 use App\Http\Controllers\ShowController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -20,10 +21,14 @@ Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
 Route::post('/logout', [AuthController::class, 'logout'])
     ->middleware('auth:sanctum')->name('auth.logout');
 
-Route::get('/shows', [ShowController::class, 'index'])->name('show.index');
-Route::get('/shows/{showId}', [ShowController::class, 'getShow'])->name('show.single');
+Route::get('/shows', [ShowController::class, 'index'])->name('shows.index');
+Route::get('/shows/{showId}', [ShowController::class, 'getShow'])->name('shows.show');
 Route::post('/shows', [ShowController::class, 'request'])
-    ->middleware('auth:sanctum')->name('show.request');
+    ->middleware('auth:sanctum')->name('shows.request');
+
+Route::get('/genres', [GenreController::class, 'index'])->name('genres.index');
+Route::patch('/genres/{genre}', [GenreController::class, 'update'])
+    ->middleware('auth:sanctum')->name('genres.update');
 
 Route::prefix('users')->name('user.')->middleware('auth:sanctum')->group(function () {
     Route::get('/', [UserController::class, 'index'])->name('user.index');
