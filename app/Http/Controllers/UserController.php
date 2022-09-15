@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\UserRequest;
 use App\Http\Resources\EpisodeCollection;
 use App\Http\Resources\ShowCollection;
+use App\Http\Resources\ShowResource;
 use App\Http\Resources\UserResource;
 use App\Models\Show;
 use Illuminate\Support\Facades\Auth;
@@ -43,5 +44,19 @@ class UserController extends Controller
     public function unwatchedEpisodes(Show $show): EpisodeCollection
     {
         return new EpisodeCollection(Auth::user()->unwatchedEpisodes($show));
+    }
+
+    public function addToWatchList(Show $show): ShowResource
+    {
+        Auth::user()->shows()->attach($show);
+
+        return new ShowResource($show);
+    }
+
+    public function removeFromWatchList(Show $show): ShowResource
+    {
+        Auth::user()->shows()->detach($show);
+
+        return new ShowResource($show);
     }
 }
