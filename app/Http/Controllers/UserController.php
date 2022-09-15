@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UserRequest;
+use App\Http\Resources\UserResource;
 use App\Models\User;
-use Illuminate\Database\Eloquent\Collection;
 
 class UserController extends Controller
 {
-    public function index(): Collection
+    public function update(UserRequest $request, User $user): UserResource
     {
-        return User::all();
+        $user->update($request->validated());
+
+        return new UserResource($user->fresh());
     }
 }

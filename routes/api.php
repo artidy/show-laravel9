@@ -42,5 +42,5 @@ Route::patch('/genres/{genre}', [GenreController::class, 'update'])
     ->middleware('auth:sanctum')->name('genres.update');
 
 Route::prefix('users')->name('user.')->middleware('auth:sanctum')->group(function () {
-    Route::get('/', [UserController::class, 'index'])->name('user.index');
+    Route::patch('/', [UserController::class, 'update'])->name('user.update');
 });
