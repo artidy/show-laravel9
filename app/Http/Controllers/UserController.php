@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UserRequest;
 use App\Http\Resources\EpisodeCollection;
+use App\Http\Resources\EpisodeResource;
 use App\Http\Resources\ShowCollection;
 use App\Http\Resources\ShowResource;
 use App\Http\Resources\UserResource;
+use App\Models\Episode;
 use App\Models\Show;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -58,5 +60,19 @@ class UserController extends Controller
         Auth::user()->shows()->detach($show);
 
         return new ShowResource($show);
+    }
+
+    public function watchEpisode(Episode $episode): EpisodeResource
+    {
+        Auth::user()->episodes()->attach($episode);
+
+        return new EpisodeResource($episode);
+    }
+
+    public function unwatchEpisode(Episode $episode): EpisodeResource
+    {
+        Auth::user()->episodes()->detach($episode);
+
+        return new EpisodeResource($episode);
     }
 }

@@ -46,6 +46,8 @@ Route::prefix('users')->name('user.')->middleware('auth:sanctum')->group(functio
     Route::get('/shows', [UserController::class, 'shows'])->name('users.shows');
     Route::get('/shows/{show}/new-episodes', [UserController::class, 'unwatchedEpisodes'])
         ->name('users.new-episodes');
-    Route::post('/shows/watch/{watch}', [UserController::class, 'addToWatchList'])->name('users.watch');
-    Route::delete('/shows/watch/{watch}', [UserController::class, 'removeFromWatchList'])->name('users.unwatch');
+    Route::post('/shows/watch/{watch}', [UserController::class, 'addToWatchList'])->name('users.show_watch');
+    Route::delete('/shows/watch/{watch}', [UserController::class, 'removeFromWatchList'])->name('users.show_unwatch');
+    Route::post('/episodes/watch/{episode}', [UserController::class, 'watchEpisode'])->name('users.episode_watched');
+    Route::delete('/episodes/watch/{episode}', [UserController::class, 'unwatchEpisode'])->name('users.episode_unwatch');
 });
