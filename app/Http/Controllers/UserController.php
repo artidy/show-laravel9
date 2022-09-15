@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UserRequest;
+use App\Http\Requests\VoteRequest;
 use App\Http\Resources\EpisodeCollection;
 use App\Http\Resources\EpisodeResource;
 use App\Http\Resources\ShowCollection;
@@ -74,5 +75,12 @@ class UserController extends Controller
         Auth::user()->episodes()->detach($episode);
 
         return new EpisodeResource($episode);
+    }
+
+    public function vote(VoteRequest $request, Show $show): ShowResource
+    {
+        Auth::user()->shows()->syncWithPivotValues($show, ['vote' => $request->vote], false);
+
+        return new ShowResource($show->fresh());
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -61,6 +62,13 @@ class User extends Authenticatable
     public function episodes(): BelongsToMany
     {
         return $this->belongsToMany(Episode::class);
+    }
+
+    public function unwatchedEpisodes(Show $show): Collection
+    {
+        $watched = $this->episodes()->where('show_id', $show->id)->pluck('id');
+
+        return $show->episodes()->whereNotIn('id', $watched)->get();
     }
 
     public function comments(): HasMany
