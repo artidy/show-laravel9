@@ -8,6 +8,7 @@ use App\Models\Show;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Testing\Fluent\AssertableJson;
 use Tests\TestCase;
 
 class CommentControllerTest extends TestCase
@@ -30,5 +31,29 @@ class CommentControllerTest extends TestCase
         $response = $this->getJson("/api/episodes/$episode->id/comments");
 
         $response->assertStatus(200);
+
+        $response->assertJson(fn (AssertableJson $json) =>
+            $json->has('data', fn ($json) =>
+                $json->whereAllType([
+                    'count' => 'integer',
+                    'comments' => 'array'
+                ])
+                ->has('comments', 10, fn ($json) =>
+                    $json->whereAllType([
+                        'id' => 'integer',
+                        'user' => 'array',
+                        'comment' => 'string',
+                        'parent_id' => 'integer|null',
+                        'created_at' => 'string',
+                    ])
+                    ->has('user', fn ($json) =>
+                        $json->whereAllType([
+                            'name' => 'string',
+                            'avatar' => 'string|null',
+                        ])
+                    )
+                )
+            )
+        );
     }
 }
