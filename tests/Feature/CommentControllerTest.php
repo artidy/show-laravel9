@@ -15,6 +15,24 @@ class CommentControllerTest extends TestCase
 {
     use RefreshDatabase;
 
+    private array $dataFields = [
+        'count' => 'integer',
+        'comments' => 'array',
+    ];
+
+    private array $commentFields = [
+        'id' => 'integer',
+        'user' => 'array',
+        'comment' => 'string',
+        'parent_id' => 'integer|null',
+        'created_at' => 'string',
+    ];
+
+    private array $userFields = [
+        'name' => 'string',
+        'avatar' => 'string|null',
+    ];
+
     /**
      * A basic feature test example.
      *
@@ -34,23 +52,11 @@ class CommentControllerTest extends TestCase
 
         $response->assertJson(fn (AssertableJson $json) =>
             $json->has('data', fn ($json) =>
-                $json->whereAllType([
-                    'count' => 'integer',
-                    'comments' => 'array'
-                ])
+                $json->whereAllType($this->dataFields)
                 ->has('comments', 10, fn ($json) =>
-                    $json->whereAllType([
-                        'id' => 'integer',
-                        'user' => 'array',
-                        'comment' => 'string',
-                        'parent_id' => 'integer|null',
-                        'created_at' => 'string',
-                    ])
+                    $json->whereAllType($this->commentFields)
                     ->has('user', fn ($json) =>
-                        $json->whereAllType([
-                            'name' => 'string',
-                            'avatar' => 'string|null',
-                        ])
+                        $json->whereAllType($this->userFields)
                     )
                 )
             )
