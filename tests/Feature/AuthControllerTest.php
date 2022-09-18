@@ -14,7 +14,7 @@ class AuthControllerTest extends TestCase
 {
     use RefreshDatabase;
 
-    private array $user = [
+    public array $user = [
         'email' => 'bailor97@example.org',
         'password' => 'password',
         'name' => 'John Bailor',
