@@ -40,7 +40,7 @@ class CommentControllerTest extends TestCase
      */
     public function test_index(): void
     {
-        User::factory(10)->create();
+        User::factory(1)->create();
         Show::factory(1)->create();
         Episode::factory(1)->create();
         Comment::factory(10)->create();
@@ -48,18 +48,69 @@ class CommentControllerTest extends TestCase
 
         $response = $this->getJson("/api/episodes/$episode->id/comments");
 
-        $response->assertStatus(200);
-
-        $response->assertJson(fn (AssertableJson $json) =>
-            $json->has('data', fn ($json) =>
-                $json->whereAllType($this->dataFields)
-                ->has('comments', 10, fn ($json) =>
-                    $json->whereAllType($this->commentFields)
-                    ->has('user', fn ($json) =>
-                        $json->whereAllType($this->userFields)
+        $response
+            ->assertStatus(200)
+            ->assertJson(fn (AssertableJson $json) =>
+                $json->has('data', fn ($json) =>
+                    $json->whereAllType($this->dataFields)
+                    ->has('comments', 10, fn ($json) =>
+                        $json->whereAllType($this->commentFields)
+                        ->has('user', fn ($json) =>
+                            $json->whereAllType($this->userFields)
+                        )
                     )
                 )
-            )
-        );
+            );
+    }
+
+    public function test_add_comment(): void
+    {
+        User::factory(1)->create();
+        Show::factory(1)->create();
+        Episode::factory(1)->create();
+        $episode = Episode::all()->first();
+        $user = User::all()->first();
+
+        $response = $this
+            ->actingAs($user, 'web')
+            ->postJson("/api/episodes/$episode->id/comments", [
+                'text' => 'Test message',
+            ]);
+
+        $response
+            ->assertStatus(200)
+            ->assertJson(fn (AssertableJson $json) =>
+                $json->has('data', fn ($json) =>
+                $json->whereAllType($this->dataFields)
+                    ->has('comments', 1, fn ($json) =>
+                    $json->whereAllType($this->commentFields)
+                        ->has('user', fn ($json) =>
+                        $json->whereAllType($this->userFields)
+                        )
+                    )
+                )
+            );
+
+        $comment = Comment::all()->first();
+
+        $response = $this
+            ->actingAs($user, 'web')
+            ->postJson("/api/episodes/$episode->id/comments/$comment->id", [
+                'text' => 'Test message',
+            ]);
+
+        $response
+            ->assertStatus(200)
+            ->assertJson(fn (AssertableJson $json) =>
+                $json->has('data', fn ($json) =>
+                $json->whereAllType($this->dataFields)
+                    ->has('comments', 2, fn ($json) =>
+                    $json->whereAllType($this->commentFields)
+                        ->has('user', fn ($json) =>
+                        $json->whereAllType($this->userFields)
+                        )
+                    )
+                )
+            );
     }
 }
