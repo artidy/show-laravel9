@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Show;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +18,11 @@ class EpisodeFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'title' => $this->faker->sentence(),
+            'show_id' => Show::inRandomOrder()->first()->id,
+            'season' => $this->faker->randomNumber(),
+            'episode_number' => $this->faker->randomNumber(),
+            'air_at' => $this->faker->dateTime(),
         ];
     }
 }
