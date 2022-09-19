@@ -113,4 +113,20 @@ class CommentControllerTest extends TestCase
                 )
             );
     }
+
+    public function test_delete_comment(): void
+    {
+        User::factory(1)->create();
+        Show::factory(1)->create();
+        Episode::factory(1)->create();
+        Comment::factory(1)->create();
+        $comment = Comment::all()->first();
+        $user = User::all()->first();
+
+        $response = $this
+            ->actingAs($user, 'web')
+            ->deleteJson("/api/comments/$comment->id");
+
+        $response->assertStatus(200);
+    }
 }
