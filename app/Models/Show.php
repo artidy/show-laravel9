@@ -28,6 +28,10 @@ class Show extends Model
         'updated_at',
     ];
 
+    protected $hidden = [
+        'pivot'
+    ];
+
     public function episodes(): HasMany
     {
         return $this->hasMany(Episode::class);
@@ -76,7 +80,13 @@ class Show extends Model
             return null;
         }
 
-        return $this->users()->firstWhere('user_id', Auth::id())->pivot->vote;
+        $userVote = $this->users()->firstWhere('user_id', Auth::id());
+
+        if (!$userVote) {
+            return null;
+        }
+
+        return $userVote->pivot->vote;
     }
 
     public function getRatingAttribute(): int
